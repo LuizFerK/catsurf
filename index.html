@@ -3,114 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three.js Grass Field</title>
+  <title>🐈‍⬛🛹 CatSurf: Meow</title>
   <style>
-    body { margin: 0; }
-    canvas { display: block; }
+    body { margin: 0 }
+    canvas { display: block }
   </style>
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/loaders/OBJLoader.js"></script>
   <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/loaders/MTLLoader.js"></script>
+  <script src="modules/camera.js"></script>
+  <script src="modules/renderer.js"></script>
+  <script src="modules/scene.js"></script>
+  <script src="modules/resize.js"></script>
+  <script src="scenario/field.js"></script>
+  <script src="scenario/light.js"></script>
+  <script src="scenario/fog.js"></script>
+  <script src="objects/cat.js"></script>
   <script>
     // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    
-    // Create a green field (plane)
-    const geometry = new THREE.PlaneGeometry(150, 75);
-    const grassTexture = new THREE.TextureLoader().load('assets/grass_bricks.avif');
-    const grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
-    
-    const field = new THREE.Mesh(geometry, grassMaterial);
-    field.rotation.x = - Math.PI / 2; // Rotate the plane to be horizontal
-    
-    const grid_size = 2;
-    
-    // Create a 5x5 grid of grass fields
-    for (let i = -grid_size; i <= grid_size; i++) {
-      for (let j = -grid_size; j <= grid_size; j++) {
-        const fieldClone = field.clone();
-        fieldClone.position.set(i * 150, 0, j * 75);
-        scene.add(fieldClone);
-      }
-    }
-    
-    // Add some ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    const loader = new THREE.OBJLoader();
-    const mtlLoader = new THREE.MTLLoader();
-    
-    // ADD CAT
-    mtlLoader.load('assets/cat.mtl', (materials) => {
-      materials.preload();
-      loader.setMaterials(materials);
-      loader.load('assets/cat.obj', (object) => {
-        object.position.set(0, 10, 50);
-        object.rotation.y = - Math.PI / 2;
-        object.scale.set(0.8, 0.8, 0.8);
-
-        // Add event listener for keydown events
-        document.addEventListener('keydown', (event) => {
-          switch(event.key) {
-            case 'ArrowLeft':
-              if (object.position.x > -30) {
-                object.position.x -= 30;
-              }
-              break;
-            case 'ArrowRight':
-              if (object.position.x < 30) {
-                object.position.x += 30;
-              }
-              break;
-          }
-        });
-
-        scene.add(object);
-      });
-    });
-
-
-    // Add fog to the scene
-    const fogColor = new THREE.Color('#000000');  // Light gray color
-    const fogNear = 100;  // Start of fog
-    const fogFar = 240;   // End of fog
-    scene.fog = new THREE.Fog(fogColor, fogNear, fogFar);
-
-    // Set the background color to match the fog
-    scene.background = fogColor;
-    
-    // Add a directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(0, 1, 1).normalize();
-    scene.add(directionalLight);
-    
-    // Set camera position
-    camera.position.set(1, 100, 70);
-    camera.lookAt(0, 0, 0);
+    const scene = createScene()
+    const camera = createCamera()
+    const renderer = createRenderer()
     
     // Resize listener
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    });
+    createResizeListener(renderer, camera)
     
+    // Scenario setup
+    addLight(scene)
+    addFog(scene)
+
+    const { animateField } = createField(scene, {
+      speed: 0.5
+    })
+
+    renderCat(scene)
+
     // Animation loop
     function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
+      requestAnimationFrame(animate)
+      animateField()
+      renderer.render(scene, camera)
     }
-    
-    animate();
+    animate()
   </script>
 </body>
 </html>
