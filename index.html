@@ -5,8 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🐈‍⬛🛹 CatSurf: Meow</title>
   <style>
-    body { margin: 0 }
+    body { margin: 0; overflow: hidden }
     canvas { display: block }
+    header {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 97%;
+      padding: 0 20px;
+      font-family: 'arial';
+    }
+    header h1 {
+      font-size: 34px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -21,6 +38,14 @@
   <script src="scenario/light.js"></script>
   <script src="scenario/fog.js"></script>
   <script src="objects/cat.js"></script>
+  <script src="objects/coin.js"></script>
+  <header>
+    <h1>🐈‍⬛🛹 CatSurf</h1>
+    <div>
+      <span>Pontos: </span>
+      <span id="coinCounter">0</span>
+    </div>
+  </header>
   <script>
     // Scene setup
     const scene = createScene()
@@ -34,19 +59,25 @@
     addLight(scene)
     addFog(scene)
 
-    const { animateField } = createField(scene, {
+    createField(scene, {
       speed: 0.5
     })
 
     renderCat(scene)
 
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate)
-      animateField()
-      renderer.render(scene, camera)
+    for (let i = 0; i < 5; i++) {
+      renderCoin(scene, {
+        lane: 0,
+        speed: 0.47,
+        startPosition: i * -25
+      })
     }
-    animate()
+
+    // Main animation loop
+    (function animate() {
+      requestAnimationFrame(animate)
+      renderer.render(scene, camera)
+    })()
   </script>
 </body>
 </html>

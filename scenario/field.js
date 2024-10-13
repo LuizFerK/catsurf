@@ -22,6 +22,8 @@ function createField(scene, { speed = 0.5 }) {
 
   // Animation function to move the fields
   function animateField() {
+    requestAnimationFrame(animateField);
+
     fields.forEach(fieldClone => {
       fieldClone.position.z += speed
       if (fieldClone.position.z > (grid_size) * 75) {
@@ -30,5 +32,5 @@ function createField(scene, { speed = 0.5 }) {
     })
   }
 
-  return { animateField }
+  animateField()
 }

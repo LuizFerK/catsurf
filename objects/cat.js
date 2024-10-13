@@ -1,7 +1,7 @@
 function renderCat(scene) {
   const loader = new THREE.OBJLoader()
   const mtlLoader = new THREE.MTLLoader()
-  
+
   mtlLoader.load('assets/cat.mtl', (materials) => {
     materials.preload()
     loader.setMaterials(materials)
@@ -9,6 +9,7 @@ function renderCat(scene) {
       object.position.set(0, 10, 50)
       object.rotation.y = - Math.PI / 2
       object.scale.set(0.8, 0.8, 0.8)
+      object.name = 'cat'
 
       // Add event listener for keydown events
       document.addEventListener('keydown', (event) => {
