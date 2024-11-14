@@ -10,7 +10,7 @@ function renderCoin(scene, { lane, speed, startPosition }) {
   });
 
   loader.load('assets/coin.obj', (object) => {
-    object.position.set(30 * lane, 10, -70 + startPosition)
+    object.position.set(30 * lane, 10, -200 + startPosition)
     object.rotation.y = - Math.PI / 2
     object.scale.set(0.05, 0.05, 0.05)
 

@@ -65,13 +65,15 @@
 
     renderCat(scene)
 
-    for (let i = 0; i < 5; i++) {
-      renderCoin(scene, {
-        lane: 0,
-        speed: 0.47,
-        startPosition: i * -25
-      })
-    }
+    withInterval(() => {
+      for (let i = 0; i < 5; i++) {
+        renderCoin(scene, {
+          lane: 0,
+          speed: 0.47,
+          startPosition: i * -25
+        });
+      }
+    }, 8000)
 
     // Main animation loop
     (function animate() {
