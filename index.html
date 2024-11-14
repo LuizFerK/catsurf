@@ -35,7 +35,9 @@
   <script src="modules/scene.js"></script>
   <script src="modules/resize.js"></script>
   <script src="scenario/field.js"></script>
+  <script src="scenario/ground.js"></script>
   <script src="scenario/light.js"></script>
+  <script src="scenario/shadow.js"></script>
   <script src="scenario/fog.js"></script>
   <script src="objects/cat.js"></script>
   <script src="objects/coin.js"></script>
@@ -58,6 +60,11 @@
     // Scenario setup
     addLight(scene)
     addFog(scene)
+    addShadow(scene, renderer)
+
+    createGround(scene, {
+      speed: 0.5
+    });
 
     createField(scene, {
       speed: 0.5
@@ -65,13 +72,20 @@
 
     renderCat(scene)
 
-    for (let i = 0; i < 5; i++) {
+    let i = 0; 
+
+    //gera moedas infinitamente 
+    function generateCoins() {
       renderCoin(scene, {
-        lane: 0,
+        lane: Math.floor(Math.random() * 3) - 1,  
         speed: 0.47,
         startPosition: i * -25
       })
+      i++;  
     }
+
+    // intervalo de geração de moedas)
+    setInterval(generateCoins, 1500);
 
     // Main animation loop
     (function animate() {
