@@ -53,6 +53,11 @@
     const scene = createScene()
     const camera = createCamera()
     const renderer = createRenderer()
+
+    const speed = 0.5;
+    const acceleration = 0.001;
+    const maxSpeed = 3
+    let currentSpeed = speed * 0.95;
     
     // Resize listener
     createResizeListener(renderer, camera)
@@ -63,34 +68,52 @@
     addShadow(scene, renderer)
 
     createGround(scene, {
-      speed: 0.5
+      speed: speed * 0.95,
+      acceleration,
+      maxSpeed
     });
 
+    renderTree(scene, {
+      speed: speed * 0.95,
+      acceleration,
+      maxSpeed
+    })
+
     createField(scene, {
-      speed: 0.5
+      speed,
+      acceleration,
+      maxSpeed
     })
 
     renderCat(scene)
 
-    renderTree(scene)
+    let interval
+    let time = 2500
+    increaseCoinSpeed()
 
-    let i = 0; 
+    function increaseCoinSpeed() {
+      clearInterval(interval)
 
-    //gera moedas infinitamente 
-    function generateCoins() {
+      if (time > 400) {
+        time = 1800 - currentSpeed * 500
+      }
+      console.log(currentSpeed)
+      console.log(time)
+
       renderCoin(scene, {
         lane: Math.floor(Math.random() * 3) - 1,  
-        speed: 0.47,
-        startPosition: i * -25
+        speed: currentSpeed,
+        acceleration,
+        maxSpeed,
+        startPosition: -200
       })
-      i++;  
-    }
 
-    // intervalo de geração de moedas)
-    setInterval(generateCoins, 1500);
+      interval = setInterval(increaseCoinSpeed, time)
+    }
 
     // Main animation loop
     (function animate() {
+      currentSpeed += acceleration;
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
     })()
