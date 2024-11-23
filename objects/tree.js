@@ -11,10 +11,16 @@ function renderTree(scene) {
       function addTree(xPosition, zPositions, namePrefix) {
         zPositions.forEach((zPosition, index) => {
           loader.load('assets/tree.obj', (object) => {
-            object.position.set(xPosition, 10, zPosition);
+            object.position.set(xPosition, 5, zPosition);
             object.scale.set(2, 2, 2);
             object.name = `${namePrefix}_${index + 1}`;//para criar um nome único para cada árvore
-  
+            // Habilitar sombras para todas as partes da árvore
+            object.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                child.castShadow = true;    // Árvores projetam sombras
+                child.receiveShadow = true; // Árvores podem receber sombras
+              }
+            });
             scene.add(object);
             moveWithScene(object);  // Função para mover com o cenário
           });
@@ -22,9 +28,9 @@ function renderTree(scene) {
       }
   
       // Posições Z para as árvores
-      const zPositions = [-70, -150, -230];  
+      const zPositions = [-70, -150, -230, -310];  
   
-      // Adiciona três árvores à direita e três à esquerda
+      // Adiciona 4 árvores à direita e 4 à esquerda
       addTree(100, zPositions, 'tree_right');
       addTree(-100, zPositions, 'tree_left');
     });

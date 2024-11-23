@@ -28,6 +28,13 @@ function renderCoin(scene, { lane, speed, startPosition }) {
     function animateCoin() {
       object.rotation.y += 0.05;
       object.position.z += speed;
+      // Habilitar sombras para cada mesh do modelo
+      object.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
 
       const cat = scene.getObjectByName('cat')
 

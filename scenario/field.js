@@ -2,11 +2,11 @@ function createField(scene, { speed = 0.5 }) {
   // Create a green field (plane)
   const geometry = new THREE.PlaneGeometry(150, 75)
   const grassTexture = new THREE.TextureLoader().load('assets/grass_bricks.avif')
-  const grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture })
+  const grassMaterial = new THREE.MeshStandardMaterial({ map: grassTexture });
   
   const field = new THREE.Mesh(geometry, grassMaterial)
   field.rotation.x = - Math.PI / 2 // Rotate the plane to be horizontal
-  
+  field.receiveShadow = true; // Permite que o chão receba sombras
   const grid_size = 2
   
   // Create a grid of grass fields

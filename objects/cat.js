@@ -10,6 +10,13 @@ function renderCat(scene) {
       object.rotation.y = - Math.PI / 1
       object.scale.set(0.2, 0.2, 0.2)
       object.name = 'cat'
+      // Habilitar sombras para cada mesh do modelo
+      object.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
 
       // Add event listener for keydown events
       document.addEventListener('keydown', (event) => {
