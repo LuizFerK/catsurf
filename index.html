@@ -40,12 +40,17 @@
   <script src="scenario/fog.js"></script>
   <script src="objects/cat.js"></script>
   <script src="objects/coin.js"></script>
+  <script src="objects/obstaculo.js"></script>
   <script src="objects/tree.js"></script>
+
   <header>
     <img src="assets/catsurf.png">
     <div>
-      <span>Pontos: </span>
-      <span id="coinCounter">0</span>
+      <span style="font-size: 2rem;">⭐ </span>
+      <span id="coinCounter" style="font-weight: bold; color:gold">0</span>
+    </div>
+    <div>
+      <span id="livesCounter" style="font-size: 4rem; color: red;">♥♥♥</span>
     </div>
   </header>
   <script>
@@ -110,6 +115,38 @@
 
       interval = setInterval(increaseCoinSpeed, time)
     }
+
+
+
+  let obstacleInterval;
+  let obstacleTime = 3000;
+
+  function spawnSimpleObstacles() {
+    clearInterval(obstacleInterval);
+
+    if (obstacleTime > 1000) {
+      obstacleTime -= 100; // Aumenta a dificuldade
+    }
+
+    renderSimpleObstacle(scene, {
+      lane: Math.floor(Math.random() * 3) - 1,
+      speed: currentSpeed,
+      acceleration,
+      maxSpeed,
+      startPosition: -200,
+   });
+
+    obstacleInterval = setInterval(spawnSimpleObstacles, obstacleTime);
+  }
+
+  // Inicializa os obstáculos simples
+  spawnSimpleObstacles();
+
+    
+    
+
+
+
 
     // Main animation loop
     (function animate() {
